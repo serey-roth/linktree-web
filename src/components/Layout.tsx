@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React, { ReactNode } from 'react'
+import { Navbar } from './Navbar';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -14,7 +15,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className='w-screen flex flex-col px-3'>
+            <Navbar />
             {children}
         </main>
         </>
