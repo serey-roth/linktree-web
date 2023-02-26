@@ -29,21 +29,22 @@ const Login: React.FC<LoginProps> = ({}) => {
     return (
         <Layout>
             <div className='flex flex-col w-full h-full
-            justify-center items-center min-h-screen
-            bg-gray-500/10'>
+            justify-center items-center mt-4'>
                 <form 
-                className='max-w-[800px] flex flex-col
-                gap-2 '
+                className=' max-w-[400px] w-full flex flex-col
+                gap-2'
                 onSubmit={handleSubmit(onSubmit)}>
                     <input
-                    className='p-1 rounded-sm' 
+                    className='p-1 rounded-sm bg-gray-400/20
+                    ' 
                     id='username'
                     type='text'
                     placeholder='Username'
                     {...register('username')}
                     />
                     <input
-                    className='p-1 rounded-sm' 
+                    className='p-1 rounded-sm bg-gray-400/20
+                    ' 
                     id='password'
                     type='password'
                     placeholder='Password'
