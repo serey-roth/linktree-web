@@ -1,5 +1,5 @@
 import { Layout } from '@/components/Layout';
-import { ApiResponseUser, JwtUser, LoginInput } from '@/generated/openapi';
+import { ApiResponseData, JwtUser, UsernameAndPassword } from '@/generated/openapi';
 import { useLogin } from '@/utils/hooks/useLogin';
 import { useRouter } from 'next/router';
 import React from 'react'
@@ -10,22 +10,29 @@ interface LoginProps {
 
 }
 
-const isWithJWt = (user: ApiResponseUser): user is JwtUser => {
-    return (user as JwtUser).accessToken !== undefined;
+const isJwtUser = (data: ApiResponseData): data is JwtUser => {
+    return (data as JwtUser).accessToken !== undefined;
 }
 
 const Login: React.FC<LoginProps> = ({}) => {
     const router = useRouter();
-    const { register, handleSubmit } = useForm<LoginInput>();
+    const { username: name } = router.query;
+
+    const { register, handleSubmit } = useForm<UsernameAndPassword>({
+        values: {
+            username: name && typeof name === 'string' ? name : '',
+            password: ''
+        }
+    });
 
     const { login } = useLogin();
 
-    const onSubmit: SubmitHandler<LoginInput> = async (values) => {
+    const onSubmit: SubmitHandler<UsernameAndPassword> = async (values) => {
         if (values.username && values.password) {
             const result = await login(values);
-            if (result.user) {
-                if (isWithJWt(result.user)) {
-                    Cookie.set("linktree", result.user.accessToken, { expires: 60 * 60 * 24 * 365 });
+            if (result.data) {
+                if (isJwtUser(result.data)) {
+                    Cookie.set("linktree", result.data.accessToken, { expires: 60 * 60 * 24 * 365 });
                 }
                 router.push('/');
             }
