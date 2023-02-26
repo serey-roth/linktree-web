@@ -1,15 +1,15 @@
-import { LoginInput } from "@/generated/openapi";
+import { UsernameAndPassword } from "@/generated/openapi";
 import { useMutation } from "react-query";
 import { usersApi } from "../openApi";
 
 export const useLogin = () => {
     const { mutateAsync, ...rest } = useMutation(
-        (values: LoginInput) => usersApi.authLoginPost({
-            loginInput: values
+        (values: UsernameAndPassword) => usersApi.authLoginPost({
+            usernameAndPassword: values
         })
     );
 
-    const login = (values: LoginInput) => {
+    const login = (values: UsernameAndPassword) => {
         return mutateAsync(values);
     }
 
