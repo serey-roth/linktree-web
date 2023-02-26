@@ -23,7 +23,6 @@ export const EditableText: React.FC<EditableTextProps> = ({
         setIsEditable(false);
     }
 
-    console.log(currentText)
     return (
         <>
         {isEditable ? (

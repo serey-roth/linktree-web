@@ -1,40 +1,25 @@
 import { Layout } from '@/components/Layout';
-import { ApiResponseData, JwtUser, UsernameAndPassword } from '@/generated/openapi';
-import { useLogin } from '@/utils/hooks/useLogin';
+import { UsernameEmailAndPassword, ModelApiResponse } from '@/generated/openapi';
+import { useRegister } from '@/utils/hooks/useRegister';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Cookie from 'js-cookie';
 
-interface LoginProps {
+interface RegisterProps {
 
 }
 
-const isJwtUser = (data: ApiResponseData): data is JwtUser => {
-    return (data as JwtUser).accessToken !== undefined;
-}
-
-const Login: React.FC<LoginProps> = ({}) => {
+const Register: React.FC<RegisterProps> = ({}) => {
     const router = useRouter();
-    const { username: name } = router.query;
+    const { register, handleSubmit } = useForm<UsernameEmailAndPassword>();
 
-    const { register, handleSubmit } = useForm<UsernameAndPassword>({
-        values: {
-            username: name && typeof name === 'string' ? name : '',
-            password: ''
-        }
-    });
+    const { register: signUp } = useRegister();
 
-    const { login } = useLogin();
-
-    const onSubmit: SubmitHandler<UsernameAndPassword> = async (values) => {
-        if (values.username && values.password) {
-            const result = await login(values);
+    const onSubmit: SubmitHandler<UsernameEmailAndPassword> = async (values) => {
+        if (values.username && values.password && values.email) {
+            const result = await signUp({...values});
             if (result.data) {
-                if (isJwtUser(result.data)) {
-                    Cookie.set("linktree", result.data.accessToken, { expires: 60 * 60 * 24 * 365 });
-                }
-                router.push('/');
+                router.push(`/auth/login/?username=${values.username}`);
             }
         }
     }
@@ -48,16 +33,21 @@ const Login: React.FC<LoginProps> = ({}) => {
                 gap-2'
                 onSubmit={handleSubmit(onSubmit)}>
                     <input
-                    className='p-1 rounded-sm bg-gray-400/20
-                    ' 
+                    className='p-1 rounded-sm bg-gray-400/20' 
                     id='username'
                     type='text'
                     placeholder='Username'
                     {...register('username')}
                     />
                     <input
-                    className='p-1 rounded-sm bg-gray-400/20
-                    ' 
+                    className='p-1 rounded-sm bg-gray-400/20' 
+                    id='email'
+                    type='text'
+                    placeholder='Email'
+                    {...register('email')}
+                    />
+                    <input
+                    className='p-1 rounded-sm bg-gray-400/20' 
                     id='password'
                     type='password'
                     placeholder='Password'
@@ -75,4 +65,4 @@ const Login: React.FC<LoginProps> = ({}) => {
     );
 }
 
-export default Login;
+export default Register;

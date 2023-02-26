@@ -22,6 +22,25 @@ paths:
               schema: 
                 $ref: '#/components/schemas/ApiResponse'
 
+  /auth/register:
+    post:
+      summary: Register a user
+      tags: 
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameEmailAndPassword'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+
   /auth/login: 
     post:
       summary: Login a potential user
@@ -32,7 +51,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginInput'
+              $ref: '#/components/schemas/UsernameAndPassword'
       responses:
         '200':
           description: OK
@@ -52,7 +71,7 @@ components:
       bearerFormat: JWT
 
   schemas:
-    LoginInput:
+    UsernameAndPassword:
       type: object
       properties:
         username:
@@ -64,6 +83,16 @@ components:
       required:
         - username
         - password
+    UsernameEmailAndPassword:
+      allOf:
+        - $ref: '#/components/schemas/UsernameAndPassword'
+        - type: object
+          properties:
+            email:
+              type: string
+              nullable: false
+          required:
+            - email
     User:
       type: object
       properties:
@@ -110,13 +139,21 @@ components:
           type: string
         httpStatus:
           type: string
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+      required: 
+        - message
     ApiResponse:
       type: object
       properties:
-        user:
+        data:
           oneOf:
             - $ref: '#/components/schemas/User'
             - $ref: '#/components/schemas/JwtUser'
+            - $ref: '#/components/schemas/Message'
           nullable: true
         error:
           $ref: '#/components/schemas/Error'
