@@ -23,9 +23,15 @@ const middleware: Middleware = {
     }
 }
 
-export const configuration = new Configuration({
+export const configurationWithMiddleware = new Configuration({
     basePath: 'http://localhost:8080/api',
     middleware: [middleware]
 });
+
+export const configuration = new Configuration({
+    basePath: 'http://localhost:8080/api',
+});
+
+export const usersApiWithMiddleware = new UsersApi(configurationWithMiddleware);
 
 export const usersApi = new UsersApi(configuration);
