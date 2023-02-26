@@ -1,4 +1,4 @@
-import { Configuration, UsersApi, Middleware, RequestContext } from "@/generated/openapi";
+import { Configuration, UsersApi, Middleware, RequestContext, ConfigurationParameters } from "@/generated/openapi";
 import Cookies from "js-cookie";
 
 const middleware: Middleware = {
@@ -23,14 +23,20 @@ const middleware: Middleware = {
     }
 }
 
-export const configurationWithMiddleware = new Configuration({
+const apiConfig: ConfigurationParameters = {
     basePath: 'http://localhost:8080/api',
-    middleware: [middleware]
+    credentials: "include",
+    headers: {
+        "Access-Control-Allow-Credentials": "true"
+    }
+}
+
+export const configurationWithMiddleware = new Configuration({
+    ...apiConfig,
+    middleware: [middleware],
 });
 
-export const configuration = new Configuration({
-    basePath: 'http://localhost:8080/api',
-});
+export const configuration = new Configuration(apiConfig);
 
 export const usersApiWithMiddleware = new UsersApi(configurationWithMiddleware);
 
