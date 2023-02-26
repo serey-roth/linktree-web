@@ -29,7 +29,7 @@ export default function Home(
     return (
         <Layout>
             <div className='flex items-center
-            justify-center min-h-screen px-2 mt-5'>
+            justify-center px-2 mt-10'>
                 <div className='flex flex-col sm:flex-row w-screen
                 justify-center'>
                     <div className='flex flex-col items-center
