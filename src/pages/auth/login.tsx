@@ -1,17 +1,12 @@
 import { Layout } from '@/components/Layout';
-import { ApiResponseData, JwtUser, UsernameAndPassword } from '@/generated/openapi';
+import { UsernameAndPassword } from '@/generated/openapi';
 import { useLogin } from '@/utils/hooks/useLogin';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Cookie from 'js-cookie';
 
 interface LoginProps {
 
-}
-
-const isJwtUser = (data: ApiResponseData): data is JwtUser => {
-    return (data as JwtUser).accessToken !== undefined;
 }
 
 const Login: React.FC<LoginProps> = ({}) => {
@@ -31,9 +26,6 @@ const Login: React.FC<LoginProps> = ({}) => {
         if (values.username && values.password) {
             const result = await login(values);
             if (result.data) {
-                if (isJwtUser(result.data)) {
-                    Cookie.set("linktree", result.data.accessToken, { expires: 60 * 60 * 24 * 365 });
-                }
                 router.push('/');
             }
         }
