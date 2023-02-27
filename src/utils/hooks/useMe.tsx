@@ -9,6 +9,7 @@ export const useMe = () => {
             .authMeGet(),
         {
             keepPreviousData: true,
+            enabled: false
         }
     );
 
