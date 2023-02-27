@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { usersApiWithMiddleware } from "../openApi";
 
@@ -12,6 +13,8 @@ export const useMe = () => {
             enabled: false
         }
     );
+
+
 
     return query;
 }
