@@ -59,6 +59,12 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
 
   /auth/logout:
     post:
@@ -153,6 +159,33 @@ components:
           type: string
         httpStatus:
           type: string
+      required:
+            - errorCode
+            - message
+            - details
+            - timestamp
+            - httpStatus
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+      required:
+        - field
+        - message
+    MultipleErrors:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            errors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+          required:
+            - errors
     Message:
       type: object
       properties:
@@ -170,5 +203,7 @@ components:
             - $ref: '#/components/schemas/Message'
           nullable: true
         error:
-          $ref: '#/components/schemas/Error'
+          oneOf:
+            - $ref: '#/components/schemas/Error'
+            - $ref: '#/components/schemas/MultipleErrors'
           nullable: true
