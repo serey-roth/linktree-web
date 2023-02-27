@@ -40,7 +40,13 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/ApiResponse'
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+                
   /auth/login: 
     post:
       summary: Login a potential user
