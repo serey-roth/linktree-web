@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link';
 import { useMe } from '@/utils/hooks/useMe';
 import { ApiResponseData, User } from '@/generated/openapi';
+import { useLogout } from '@/utils/hooks/useLogout';
+import { useRouter } from 'next/router';
+import { hasCookie } from '@/utils/hasCookie';
 
 interface NavbarProps {
 
@@ -12,7 +15,24 @@ const isUser = (data: ApiResponseData): data is User => {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-    const { data: meData } = useMe();
+    const router = useRouter();
+
+    const { data: meData, refetch } = useMe();
+
+    const { logout } = useLogout();
+
+    const handleLogout = async () => {
+        const result = await logout();
+        if (result.data) {
+            router.push('/auth/login');
+        }
+    }
+
+    useEffect(() => {
+        if (hasCookie("linktree")) {
+            refetch();
+        }
+    })
 
     return (
         <div className='w-full flex items-center justify-between
@@ -30,9 +50,10 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                             {isUser(meData.data) && meData.data.username.charAt(0)}
                             </p>
                         </div>
-                        <Link href='/auth/login'>
+                        <button
+                        onClick={handleLogout}>
                             log out
-                        </Link>
+                        </button>
                     </>
                 ) : (
                     <>
