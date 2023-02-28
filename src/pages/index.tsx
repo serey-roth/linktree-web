@@ -2,16 +2,19 @@ import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
 import { useCookie } from '@/utils/hooks/useCookie'
-import { useLinks } from '@/utils/hooks/useLinks'
 import { useMe } from '@/utils/hooks/useMe'
+import { useSortedPaginatedLinks } from '@/utils/hooks/useSortedPaginatedLinks'
 import { Link } from '@/utils/types/Link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function Home() {
-    const [currentLinks, setCurrentLinks] = useState<Link[]>([]);
-    
-    const { data, refetch: refetchLinks } = useLinks();
+    const { data, refetch } = useSortedPaginatedLinks({
+        pageCount: 5,
+        pageNumber: 1,
+        sortKey: 'createdAt',
+        order: 'DESC'
+    });
     const { data: meData, refetch: refetchMe } = useMe();
     const { cookie } = useCookie("linktree");
 
@@ -19,27 +22,27 @@ export default function Home() {
         if (cookie) {
             refetchMe();
         }
-    }, [cookie])
+    }, [cookie]);
 
     useEffect(() => {
         if (meData) {
-            refetchLinks();
+            refetch();
         }
-    }, [meData])
+    }, [meData]);
 
     const addNewLink = (link: Link) => {
-        setCurrentLinks(prevLinks => ([
-            ...prevLinks,
-            link
-        ]))
+        // setCurrentLinks(prevLinks => ([
+        //     ...prevLinks,
+        //     link
+        // ]))
     }
 
     const deleteNewLink = (index: number) => {
-        setCurrentLinks(prevLinks => {
-            const copiedLinks = prevLinks.slice();
-            copiedLinks.splice(index, 1);
-            return copiedLinks;
-        });
+        // setCurrentLinks(prevLinks => {
+        //     const copiedLinks = prevLinks.slice();
+        //     copiedLinks.splice(index, 1);
+        //     return copiedLinks;
+        // });
     }
 
     return (
