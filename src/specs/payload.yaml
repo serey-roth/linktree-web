@@ -22,3 +22,26 @@ components:
               nullable: false
           required:
             - email
+    PaginatedQuery:
+      type: object
+      properties:
+        pageCount:
+          type: integer
+        pageNumber:
+          type: integer
+      required:
+        - pageCount
+        - pageNumber
+    SortedPaginatedQuery:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedQuery'
+        - type: object:
+          properties:
+            sortKey:
+              type: string
+            order:
+              type: string
+              enum: [ASC, DESC]
+          required:
+            - sortKey
+            - order
