@@ -3,25 +3,20 @@ import { QueryFunctionContext, QueryKey, useQuery } from "react-query";
 import { linksApi } from "../openApi";
 
 const PAGE_COUNT = 5;
-const PAGE_NUMBER = 1;
+const PAGE_NUMBER = 0;
 
 type PaginatedPayload = SecureLinksPaginatedGetRequest;
 
-const getPaginatedLinks = async (key: QueryFunctionContext<QueryKey, 
-    PaginatedPayload>) => {
-    return linksApi.withPreMiddleware().secureLinksPaginatedGet({
-        pageCount: key.pageParam?.pageCount || PAGE_COUNT ,
-        pageNumber: key.pageParam?.pageNumber || PAGE_NUMBER,
-    });
+const getPaginatedLinks = async (payload: PaginatedPayload) => {
+    return linksApi.withPreMiddleware().secureLinksPaginatedGet(payload);
 }
 
 export const usePaginatedLinks = (payload: PaginatedPayload) => {
     const query = useQuery(
         ['paginated-links', payload], 
-        getPaginatedLinks,
+        () => getPaginatedLinks(payload),
         {
             keepPreviousData: true,
-            enabled: false,
         }
     )
 
