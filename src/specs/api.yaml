@@ -85,9 +85,9 @@ paths:
               schema: 
                 $ref: '#/components/schemas/ApiResponse'
 
-  /secure:
+  /secure/links/all:
     get:
-      summary: Get a list of links for the current user
+      summary: Get all links of the current user
       tags:
         - Links
       responses:
