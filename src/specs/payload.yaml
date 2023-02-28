@@ -1,0 +1,24 @@
+components:
+  schemas:
+    UsernameAndPassword:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+      required:
+        - username
+        - password
+    UsernameEmailAndPassword:
+      allOf:
+        - $ref: '#/components/schemas/UsernameAndPassword'
+        - type: object
+          properties:
+            email:
+              type: string
+              nullable: false
+          required:
+            - email
