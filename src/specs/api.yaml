@@ -105,12 +105,15 @@ paths:
       summary: Get a paginated list of links for the current user
       tags:
         - Links
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: 'payload.yaml#/components/schemas/PaginatedQuery'
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
       responses:
         '200':
           description: OK
@@ -121,17 +124,29 @@ paths:
                 items:
                   $ref: 'links.yaml#/components/schemas/Link'
       
-  /secure/links/paginated-sorted:
+  /secure/links/paginated_sorted:
     get:
       summary: Get a sorted, paginated list of links for the current user
       tags:
         - Links
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: 'payload.yaml#/components/schemas/SortedPaginatedQuery'
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
       responses:
         '200':
           description: OK
