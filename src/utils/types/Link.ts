@@ -1,5 +1,5 @@
 export type Link = {
-    href: string;
+    url: string;
     title: string;
     imageSrc?: string;
 }

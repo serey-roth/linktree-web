@@ -1,4 +1,4 @@
-import { Configuration, UsersApi, Middleware, RequestContext, ConfigurationParameters } from "@/generated/openapi";
+import { Configuration, UsersApi, Middleware, RequestContext, ConfigurationParameters, LinksApi } from "@/generated/openapi";
 import Cookies from "js-cookie";
 
 const middleware: Middleware = {
@@ -41,3 +41,5 @@ export const configuration = new Configuration(apiConfig);
 export const usersApiWithMiddleware = new UsersApi(configurationWithMiddleware);
 
 export const usersApi = new UsersApi(configuration);
+
+export const linksApi = new LinksApi(configurationWithMiddleware);

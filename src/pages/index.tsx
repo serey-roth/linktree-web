@@ -1,15 +1,31 @@
 import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
+import { useCookie } from '@/utils/hooks/useCookie'
+import { useLinks } from '@/utils/hooks/useLinks'
+import { useMe } from '@/utils/hooks/useMe'
 import { Link } from '@/utils/types/Link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function Home(
-    { links }: 
-    { links: Link[] }
-) {
-    const [currentLinks, setCurrentLinks] = useState<Link[]>(links);
+export default function Home() {
+    const [currentLinks, setCurrentLinks] = useState<Link[]>([]);
+    
+    const { data, refetch: refetchLinks } = useLinks();
+    const { data: meData, refetch: refetchMe } = useMe();
+    const { cookie } = useCookie("linktree");
+
+    useEffect(() => {
+        if (cookie) {
+            refetchMe();
+        }
+    }, [cookie])
+
+    useEffect(() => {
+        if (meData) {
+            refetchLinks();
+        }
+    }, [meData])
 
     const addNewLink = (link: Link) => {
         setCurrentLinks(prevLinks => ([
@@ -45,7 +61,7 @@ export default function Home(
                             @alexveraros12
                         </h1>
                         <LinkList 
-                            links={currentLinks} 
+                            links={data || []} 
                             onDeleteLink={deleteNewLink}/>
                     </div>
                     <div className='w-full sm:max-w-[400px] sm:pl-2'>
@@ -55,33 +71,4 @@ export default function Home(
             </div>
         </Layout>
     )
-}
-
-export async function getStaticProps() {
-    return {
-        props: {
-            links: [
-                {
-                    imageSrc: 'https://images.unsplash.com/photo-1624561172888-ac93c696e10c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-                    title: 'Lorem ipsum dolor, sit amet',
-                    href: '',
-                },
-                {
-                    imageSrc: 'https://images.unsplash.com/photo-1624561172888-ac93c696e10c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-                    title: 'Lorem ipsum dolor, sit amet',
-                    href: '',
-                },
-                {
-                    imageSrc: 'https://images.unsplash.com/photo-1624561172888-ac93c696e10c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-                    title: 'Lorem ipsum dolor, sit amet',
-                    href: '',
-                },
-                {
-                    imageSrc: 'https://images.unsplash.com/photo-1624561172888-ac93c696e10c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-                    title: 'Lorem ipsum dolor, sit amet',
-                    href: '',
-                }
-            ]
-        }
-    }
 }
