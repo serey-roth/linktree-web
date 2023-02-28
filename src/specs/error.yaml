@@ -1,0 +1,55 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error: 
+      type: object
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+        timestamp:
+          type: string
+        httpStatus:
+          type: string
+      required:
+            - errorCode
+            - message
+            - details
+            - timestamp
+            - httpStatus
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+      required:
+        - field
+        - message
+    MultipleErrors:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            errors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+          required:
+            - errors
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+      required: 
+        - message
