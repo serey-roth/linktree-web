@@ -10,7 +10,7 @@ type LinkCardProps = Link & {
 }
 
 export const LinkCard: React.FC<LinkCardProps> = ({ 
-    href, 
+    url, 
     title, 
     imageSrc,
     onDelete
@@ -34,10 +34,10 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         )}
         <div className="flex flex-col">
             <EditableText text={title} textType='text'/>
-            {href && <EditableText text={href} textType='url' />}
+            {url && <EditableText text={url} textType='url' />}
         </div>
         <div className="flex flex-row items-center mr-2 gap-2">
-            <a href={href}>
+            <a href={url}>
                 <HiExternalLink size={15} />
             </a>
             <button onClick={onDelete}>
