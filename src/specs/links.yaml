@@ -1,0 +1,17 @@
+components:
+  schemas:
+    Link:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - title
+        - url
