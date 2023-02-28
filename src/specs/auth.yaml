@@ -1,0 +1,58 @@
+components:
+  schemas:
+    UsernameAndPassword:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+      required:
+        - username
+        - password
+    UsernameEmailAndPassword:
+      allOf:
+        - $ref: '#/components/schemas/UsernameAndPassword'
+        - type: object
+          properties:
+            email:
+              type: string
+              nullable: false
+          required:
+            - email
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: false
+        username:
+          type: string
+          nullable: false
+        email:
+          type: string
+          nullable: false
+        roles:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - username
+        - email
+        - roles
+    JwtUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            accessToken:
+              type: string
+            tokenType:
+              type: string
+          required:
+            - accessToken
+            - tokenType
+    
