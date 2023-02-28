@@ -1,0 +1,47 @@
+components:
+  schemas:
+    UsernameAndPassword:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+      required:
+        - username
+        - password
+    UsernameEmailAndPassword:
+      allOf:
+        - $ref: '#/components/schemas/UsernameAndPassword'
+        - type: object
+          properties:
+            email:
+              type: string
+              nullable: false
+          required:
+            - email
+    PaginatedQuery:
+      type: object
+      properties:
+        pageCount:
+          type: integer
+        pageNumber:
+          type: integer
+      required:
+        - pageCount
+        - pageNumber
+    SortedPaginatedQuery:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedQuery'
+        - type: object
+          properties:
+            sortKey:
+              type: string
+            order:
+              type: string
+              enum: [ASC, DESC]
+          required:
+            - sortKey
+            - order

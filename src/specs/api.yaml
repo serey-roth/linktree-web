@@ -32,7 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsernameEmailAndPassword'
+              $ref: 'payload.yaml#/components/schemas/UsernameEmailAndPassword'
       responses:
         '200':
           description: OK
@@ -57,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsernameAndPassword'
+              $ref: 'payload.yaml#/components/schemas/UsernameAndPassword'
       responses:
         '200':
           description: OK
@@ -85,9 +85,9 @@ paths:
               schema: 
                 $ref: '#/components/schemas/ApiResponse'
 
-  /secure:
+  /secure/links/all:
     get:
-      summary: Get a list of links for the current user
+      summary: Get all links for the current user
       tags:
         - Links
       responses:
@@ -98,7 +98,64 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Link'
+                  $ref: 'links.yaml#/components/schemas/Link'
+  
+  /secure/links/paginated:
+    get:
+      summary: Get a paginated list of links for the current user
+      tags:
+        - Links
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'links.yaml#/components/schemas/Link'
+      
+  /secure/links/paginated_sorted:
+    get:
+      summary: Get a sorted, paginated list of links for the current user
+      tags:
+        - Links
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'links.yaml#/components/schemas/Link'
 
 security:
   - bearerAuth: []
@@ -111,134 +168,17 @@ components:
       bearerFormat: JWT
 
   schemas:
-    UsernameAndPassword:
-      type: object
-      properties:
-        username:
-          type: string
-          nullable: false
-        password:
-          type: string
-          nullable: false
-      required:
-        - username
-        - password
-    UsernameEmailAndPassword:
-      allOf:
-        - $ref: '#/components/schemas/UsernameAndPassword'
-        - type: object
-          properties:
-            email:
-              type: string
-              nullable: false
-          required:
-            - email
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          nullable: false
-        username:
-          type: string
-          nullable: false
-        email:
-          type: string
-          nullable: false
-        roles:
-          type: array
-          items:
-            type: string
-      required:
-        - id
-        - username
-        - email
-        - roles
-    JwtUser:
-      allOf:
-        - $ref: '#/components/schemas/User'
-        - type: object
-          properties:
-            accessToken:
-              type: string
-            tokenType:
-              type: string
-          required:
-            - accessToken
-            - tokenType
-    Error: 
-      type: object
-      properties:
-        errorCode:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-        timestamp:
-          type: string
-        httpStatus:
-          type: string
-      required:
-            - errorCode
-            - message
-            - details
-            - timestamp
-            - httpStatus
-    FieldError:
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-      required:
-        - field
-        - message
-    MultipleErrors:
-      allOf:
-        - $ref: '#/components/schemas/Error'
-        - type: object
-          properties:
-            errors:
-              type: array
-              items:
-                $ref: '#/components/schemas/FieldError'
-          required:
-            - errors
-    Message:
-      type: object
-      properties:
-        message:
-          type: string
-      required: 
-        - message
     ApiResponse:
       type: object
       properties:
         data:
           oneOf:
-            - $ref: '#/components/schemas/User'
-            - $ref: '#/components/schemas/JwtUser'
-            - $ref: '#/components/schemas/Message'
+            - $ref: 'auth.yaml#/components/schemas/User'
+            - $ref: 'auth.yaml#/components/schemas/JwtUser'
+            - $ref: 'error.yaml#/components/schemas/Message'
           nullable: true
         error:
           oneOf:
-            - $ref: '#/components/schemas/Error'
-            - $ref: '#/components/schemas/MultipleErrors'
+            - $ref: 'error.yaml#/components/schemas/Error'
+            - $ref: 'error.yaml#/components/schemas/MultipleErrors'
           nullable: true
-    Link:
-      type: object
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        url:
-          type: string
-        description:
-          type: string
-      required:
-        - id
-        - title
-        - url

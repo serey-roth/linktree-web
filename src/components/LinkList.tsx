@@ -3,7 +3,7 @@ import React from "react";
 import { LinkCard } from "./LinkCard";
 
 interface LinkListProps {
-    links: Link[];
+    links?: Link[];
     onDeleteLink: (linkIndex: number) => void;
 }
 
@@ -15,10 +15,11 @@ export const LinkList: React.FC<LinkListProps> = ({
         onDeleteLink(index);
     }
 
+    console.log(links)
     return (
         <div className="flex flex-col mt-2 w-full gap-1 max-h-[500px]
         overflow-y-auto">
-            {links.map(({ url, title, imageSrc }, index) => (
+            {links?.map(({ url, title, imageSrc }, index) => (
                 <LinkCard 
                 key={index}
                 title={title}
@@ -27,7 +28,7 @@ export const LinkList: React.FC<LinkListProps> = ({
                 onDelete={() => handleDeleteLink(index)}
                 />
             ))}
-            {links.length === 0 && (
+            {links?.length === 0 && (
                 <p className='text-slate-300 text-center'>
                     No links
                 </p>
