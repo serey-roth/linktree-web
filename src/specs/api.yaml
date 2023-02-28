@@ -32,7 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'auth.yaml#/components/schemas/UsernameEmailAndPassword'
+              $ref: 'payload.yaml#/components/schemas/UsernameEmailAndPassword'
       responses:
         '200':
           description: OK
@@ -57,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'auth.yaml#/components/schemas/UsernameAndPassword'
+              $ref: 'payload.yaml#/components/schemas/UsernameAndPassword'
       responses:
         '200':
           description: OK
@@ -87,9 +87,51 @@ paths:
 
   /secure/links/all:
     get:
-      summary: Get all links of the current user
+      summary: Get all links for the current user
       tags:
         - Links
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'links.yaml#/components/schemas/Link'
+  
+  /secure/links/paginated:
+    get:
+      summary: Get a paginated list of links for the current user
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'payload.yaml#/components/schemas/PaginatedQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'links.yaml#/components/schemas/Link'
+      
+  /secure/links/paginated-sorted:
+    get:
+      summary: Get a sorted, paginated list of links for the current user
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'payload.yaml#/components/schemas/SortedPaginatedQuery'
       responses:
         '200':
           description: OK
