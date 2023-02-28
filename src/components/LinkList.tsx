@@ -18,11 +18,11 @@ export const LinkList: React.FC<LinkListProps> = ({
     return (
         <div className="flex flex-col mt-2 w-full gap-1 max-h-[500px]
         overflow-y-auto">
-            {links.map(({ href, title, imageSrc }, index) => (
+            {links.map(({ url, title, imageSrc }, index) => (
                 <LinkCard 
                 key={index}
                 title={title}
-                href={href}
+                url={url}
                 imageSrc={imageSrc}
                 onDelete={() => handleDeleteLink(index)}
                 />
