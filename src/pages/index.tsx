@@ -6,15 +6,19 @@ import { useMe } from '@/utils/hooks/useMe'
 import { useSortedPaginatedLinks } from '@/utils/hooks/useSortedPaginatedLinks'
 import { Link } from '@/utils/types/Link'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-    const { data, refetch } = useSortedPaginatedLinks({
+    const [page, setPage] = useState(0);
+    const [allLinks, setAllLinks] = useState<Link[]>();
+
+    const { data, isLoading, isError } = useSortedPaginatedLinks({
         pageCount: 5,
-        pageNumber: 1,
+        pageNumber: page,
         sortKey: 'createdAt',
         order: 'DESC'
     });
+
     const { data: meData, refetch: refetchMe } = useMe();
     const { cookie } = useCookie("linktree");
 
@@ -23,13 +27,7 @@ export default function Home() {
             refetchMe();
         }
     }, [cookie]);
-
-    useEffect(() => {
-        if (meData) {
-            refetch();
-        }
-    }, [meData]);
-
+    
     const addNewLink = (link: Link) => {
         // setCurrentLinks(prevLinks => ([
         //     ...prevLinks,
@@ -45,10 +43,23 @@ export default function Home() {
         // });
     }
 
+    const nextPage = () => {
+        setPage(prevPage => prevPage + 1);
+    }
+
+    const prevPage = () => {
+        setPage(prevPage => prevPage < 1 ? prevPage : prevPage - 1)
+    }
+
+    if (isLoading) {
+      return <h2>Loading...</h2>;
+    }
+
     return (
         <Layout>
             <div className='flex items-center
             justify-center px-2 mt-10'>
+                {page}
                 <div className='flex flex-col sm:flex-row w-screen
                 justify-center'>
                     <div className='flex flex-col items-center
@@ -64,13 +75,28 @@ export default function Home() {
                             @alexveraros12
                         </h1>
                         <LinkList 
-                            links={data || []} 
+                            links={data} 
                             onDeleteLink={deleteNewLink}/>
+                        <div className='grid items-center
+                        w-full grid-cols-2 gap-1'>
+                            <button
+                            onClick={prevPage}
+                            className='bg-teal-400
+                            p-2 rounded-lg drop-shadow-sm'>
+                                Prev page
+                            </button>
+                            <button
+                            onClick={nextPage}
+                            className='bg-teal-400
+                            p-2 rounded-lg drop-shadow-sm'>
+                                Next page
+                            </button>
+                        </div>
                     </div>
                     <div className='w-full sm:max-w-[400px] sm:pl-2'>
                         <AddLink onNewLink={addNewLink} />
                     </div>
-                    </div>
+                </div>
             </div>
         </Layout>
     )
