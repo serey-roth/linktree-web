@@ -12,7 +12,7 @@ export default function Home() {
     const [page, setPage] = useState(0);
     const [allLinks, setAllLinks] = useState<Link[]>();
 
-    const { data, isFetching, isError } = useSortedPaginatedLinks({
+    const { data: linkData, isFetching, isError } = useSortedPaginatedLinks({
         pageCount: 5,
         pageNumber: page,
         sortKey: 'createdAt',
@@ -71,7 +71,7 @@ export default function Home() {
                         </h1>
                         <LinkList 
                             isFetching={isFetching}
-                            links={data} 
+                            links={linkData?.data || []} 
                             onDeleteLink={deleteNewLink}/>
                         <div className='grid items-center
                         w-full grid-cols-2 gap-1'>
