@@ -27,6 +27,8 @@ const apiConfig: ConfigurationParameters = {
     basePath: 'http://localhost:8080/api',
     credentials: "include",
     headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
         "Access-Control-Allow-Credentials": "true"
     }
 }
