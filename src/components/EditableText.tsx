@@ -32,7 +32,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
                 <input
                 autoFocus
                 className='py-1 px-2 ring-0 appearance-none
-                outline-none border-0 focus:ring 
+                outline-none border-0 focus:ring
                 focus:ring-slate-200 rounded-sm'
                 placeholder='Title'
                 required
@@ -46,11 +46,13 @@ export const EditableText: React.FC<EditableTextProps> = ({
                 </button>
             </form>
         ):
-        (<div className="flex items-center gap-2">
+        (<div className="flex items-center gap-2 group">
             <p className="text-center max-w-[130px] sm:max-w-full truncate">
                 {currentText}
             </p>
-            <button onClick={() => setIsEditable(true)}>
+            <button 
+            className='opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out'
+            onClick={() => setIsEditable(true)}>
                 <AiFillEdit size={15} />
             </button>
         </div>)}
