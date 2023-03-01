@@ -1,25 +1,23 @@
 import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
+import { LinkContextProvider, useLinkContext } from '@/contexts/LinkContext'
 import { useCookie } from '@/utils/hooks/useCookie'
 import { useMe } from '@/utils/hooks/useMe'
-import { useSortedPaginatedLinks } from '@/utils/hooks/useSortedPaginatedLinks'
 import { Link } from '@/utils/types/Link'
+import { withContextProvider } from '@/utils/withContextProvider'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-export default function Home() {
-    const [page, setPage] = useState(0);
-    const [allLinks, setAllLinks] = useState<Link[]>();
+function Home() {
+    const {
+        linkData,
+        pageNumber,
+        isFetching,
+        updatePageNumber
+    } = useLinkContext();
 
-    const { data, isFetching, isError } = useSortedPaginatedLinks({
-        pageCount: 5,
-        pageNumber: page,
-        sortKey: 'createdAt',
-        order: 'DESC'
-    });
-
-    const { data: meData, refetch: refetchMe } = useMe();
+    const { refetch: refetchMe } = useMe();
     const { cookie } = useCookie("linktree");
 
     useEffect(() => {
@@ -44,11 +42,11 @@ export default function Home() {
     }
 
     const nextPage = () => {
-        setPage(prevPage => prevPage + 1);
+        updatePageNumber(pageNumber + 1);
     }
 
     const prevPage = () => {
-        setPage(prevPage => prevPage < 1 ? prevPage : prevPage - 1)
+        updatePageNumber(pageNumber < 1 ? pageNumber : pageNumber - 1)
     }
 
     return (
@@ -71,7 +69,7 @@ export default function Home() {
                         </h1>
                         <LinkList 
                             isFetching={isFetching}
-                            links={data} 
+                            links={linkData?.data || []} 
                             onDeleteLink={deleteNewLink}/>
                         <div className='grid items-center
                         w-full grid-cols-2 gap-1'>
@@ -97,3 +95,5 @@ export default function Home() {
         </Layout>
     )
 }
+
+export default withContextProvider(Home, LinkContextProvider);

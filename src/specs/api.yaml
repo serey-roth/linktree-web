@@ -120,9 +120,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: 'links.yaml#/components/schemas/Link'
+                $ref: 'links.yaml#/components/schemas/PaginatedReponse'
       
   /secure/links/paginated_sorted:
     get:
@@ -153,9 +151,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: 'links.yaml#/components/schemas/Link'
+                $ref: 'links.yaml#/components/schemas/PaginatedReponse'
+                  
 
 security:
   - bearerAuth: []
