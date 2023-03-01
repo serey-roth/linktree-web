@@ -151,7 +151,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiLinkResponse'
-                  
+
+  /secure/links:
+    post:
+      summary: Add a new link
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'payload.yaml#/components/schemas/LinkPayload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean 
 
 security:
   - bearerAuth: []
