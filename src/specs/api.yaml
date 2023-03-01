@@ -20,7 +20,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
 
   /auth/register:
     post:
@@ -39,13 +39,13 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
         '400':
           description: Bad request
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
                 
   /auth/login: 
     post:
@@ -64,13 +64,13 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
         '400':
           description: Bad request
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
 
   /auth/logout:
     post:
@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/ApiAuthResponse'
 
   /secure/links/all:
     get:
@@ -96,9 +96,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: 'links.yaml#/components/schemas/Link'
+                $ref: '#/components/schemas/ApiLinkResponse'
+                  
   
   /secure/links/paginated:
     get:
@@ -120,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'links.yaml#/components/schemas/PaginatedReponse'
+                $ref: '#/components/schemas/ApiLinkResponse'
       
   /secure/links/paginated_sorted:
     get:
@@ -151,7 +150,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'links.yaml#/components/schemas/PaginatedReponse'
+                $ref: '#/components/schemas/ApiLinkResponse'
                   
 
 security:
@@ -165,7 +164,18 @@ components:
       bearerFormat: JWT
 
   schemas:
-    ApiResponse:
+    ApiLinkResponse:
+      type: object
+      properties:
+        data:
+          $ref: 'links.yaml#/components/schemas/PaginatedResponse'
+        error:
+          oneOf:
+            - $ref: 'error.yaml#/components/schemas/Error'
+            - $ref: 'error.yaml#/components/schemas/MultipleErrors'
+          nullable: true
+
+    ApiAuthResponse:
       type: object
       properties:
         data:

@@ -1,11 +1,14 @@
-import { PaginatedReponse } from "@/generated/openapi";
+import { ModelError, PaginatedResponse } from "@/generated/openapi";
 import { useSortedPaginatedLinks } from "@/utils/hooks/useSortedPaginatedLinks";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type Order = "ASC" | "DESC";
 
+type Error = ModelError;
+
 type LinkContextValues = {
-    linkData: PaginatedReponse | undefined;
+    data: PaginatedResponse | undefined;
+    error: Error | undefined;
     isFetching: boolean;
     pageNumber: number;
     pageCount: number;
@@ -27,7 +30,7 @@ export const LinkContextProvider = ({
     const [sortKey, setSortKey] = useState<string>("createdAt");
     const [order, setOrder] = useState<Order>("DESC");
     
-    const { data: linkData, isFetching} = useSortedPaginatedLinks({
+    const { data: linkData, isFetching, refetch} = useSortedPaginatedLinks({
         pageCount,
         pageNumber,
         sortKey,
@@ -50,10 +53,15 @@ export const LinkContextProvider = ({
         setOrder(order);
     }
 
+    useEffect(() => {
+        refetch();
+    }, [pageNumber, pageCount, sortKey, order])
+
     return (
         <LinkContext.Provider
         value={{
-            linkData,
+            data: (linkData?.data as PaginatedResponse | undefined),
+            error: (linkData?.error as Error | undefined),
             isFetching,
             pageCount,
             pageNumber,

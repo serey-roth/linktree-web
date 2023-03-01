@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 
 function Home() {
     const {
-        linkData,
+        data: linkData,
         pageNumber,
         isFetching,
         updatePageNumber
