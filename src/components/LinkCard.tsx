@@ -12,38 +12,44 @@ type LinkCardProps = Link & {
 export const LinkCard: React.FC<LinkCardProps> = ({ 
     url, 
     title, 
+    description,
     imageSrc,
     onDelete
 }) => {
     return (
-        <div
-        className="p-1 border shadow-md
-                rounded-lg flex items-center justify-between gap-1
-                group"
+        <div className="p-1 border shadow-md
+        rounded-lg flex items-center gap-2"
         >
-        {imageSrc ? (
-            <Image
-            className="rounded-lg aspect-square object-cover"
-            alt="user profile image"
-            src={imageSrc}
-            width={50}
-            height={50}
-            />
-        ) : (
-            <div className="bg-gray-400 w-[50px] h-[50px] rounded-lg" />
-        )}
-        <div className="flex flex-col">
-            <EditableText text={title} textType='text'/>
-            {url && <EditableText text={url} textType='url' />}
-        </div>
-        <div className="flex flex-row items-center mr-2 gap-2">
-            <a href={url}>
-                <HiExternalLink size={15} />
-            </a>
-            <button onClick={onDelete}>
-                <AiFillDelete size={15} />
-            </button>
-        </div>
+            {imageSrc ? (
+                <Image
+                className="rounded-lg aspect-square object-cover"
+                alt="user profile image"
+                src={imageSrc}
+                width={50}
+                height={50}
+                loading='lazy'
+                />
+            ) : (
+                <div className="bg-gray-400 w-[50px] h-[50px] rounded-lg" />
+            )}
+            <div className="flex flex-col max-w-[400px] flex-1">
+                <span className="font-semibold">
+                    <EditableText text={title} textType='text'/>
+                </span>
+                {description && (
+                    <span className="text-gray-400 text-sm">
+                        <EditableText text={description} />
+                    </span>
+                )}
+            </div>
+            <div className="flex flex-row items-center mr-2 ml-auto gap-2">
+                <a href={url}>
+                    <HiExternalLink size={15} />
+                </a>
+                <button onClick={onDelete}>
+                    <AiFillDelete size={15} />
+                </button>
+            </div>
         </div>
     );
 };

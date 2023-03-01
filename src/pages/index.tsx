@@ -12,7 +12,7 @@ export default function Home() {
     const [page, setPage] = useState(0);
     const [allLinks, setAllLinks] = useState<Link[]>();
 
-    const { data, isLoading, isError } = useSortedPaginatedLinks({
+    const { data, isFetching, isError } = useSortedPaginatedLinks({
         pageCount: 5,
         pageNumber: page,
         sortKey: 'createdAt',
@@ -51,15 +51,10 @@ export default function Home() {
         setPage(prevPage => prevPage < 1 ? prevPage : prevPage - 1)
     }
 
-    if (isLoading) {
-      return <h2>Loading...</h2>;
-    }
-
     return (
         <Layout>
             <div className='flex items-center
             justify-center px-2 mt-10'>
-                {page}
                 <div className='flex flex-col sm:flex-row w-screen
                 justify-center'>
                     <div className='flex flex-col items-center
@@ -75,6 +70,7 @@ export default function Home() {
                             @alexveraros12
                         </h1>
                         <LinkList 
+                            isFetching={isFetching}
                             links={data} 
                             onDeleteLink={deleteNewLink}/>
                         <div className='grid items-center
