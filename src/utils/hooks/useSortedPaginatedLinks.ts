@@ -14,6 +14,7 @@ export const useSortedPaginatedLinks = (payload: SortedPaginatedPayload) => {
         () => getSortedPaginatedLinks(payload),
         {
             keepPreviousData: true,
+            enabled: false
         }
     )
 
