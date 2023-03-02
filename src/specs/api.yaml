@@ -169,6 +169,26 @@ paths:
           content:
             application/json:
               schema:
+                type: boolean
+
+  /secure/link/{id}:
+    delete:
+      summary: Delete a link
+      tags:
+        - Links
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the link to be deleted
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
                 type: boolean 
 
 security:
