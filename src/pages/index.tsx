@@ -69,8 +69,7 @@ function Home() {
                         </h1>
                         <LinkList 
                             isFetching={isFetching}
-                            links={linkData?.data || []} 
-                            onDeleteLink={deleteNewLink}/>
+                            links={linkData?.data || []}/>
                         <div className='grid items-center
                         w-full grid-cols-2 gap-1'>
                             <button
