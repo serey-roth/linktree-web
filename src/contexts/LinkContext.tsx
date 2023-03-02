@@ -18,6 +18,7 @@ type LinkContextValues = {
     updatePageCount: (pageNumber: number) => void;
     updateSortKey: (sorKey: string) => void;
     updateSortOrder: (order: Order) => void;
+    refetchLinks: () => void;
 };
 
 const LinkContext = createContext<LinkContextValues>({} as LinkContextValues);
@@ -53,6 +54,10 @@ export const LinkContextProvider = ({
         setOrder(order);
     }
 
+    const refetchLinks = () => {
+        refetch();
+    }
+
     useEffect(() => {
         refetch();
     }, [pageNumber, pageCount, sortKey, order])
@@ -70,7 +75,8 @@ export const LinkContextProvider = ({
             updatePageCount,
             updatePageNumber,
             updateSortKey,
-            updateSortOrder
+            updateSortOrder,
+            refetchLinks,
         }}>
             {children}
         </LinkContext.Provider>
