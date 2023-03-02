@@ -1,3 +1,4 @@
+import { useDeleteLink } from "@/utils/hooks/useDeleteLink";
 import { Link } from "@/utils/types/Link";
 import React from "react";
 import { LinkCard } from "./LinkCard";
@@ -5,16 +6,16 @@ import { LinkCard } from "./LinkCard";
 interface LinkListProps {
     links?: Link[];
     isFetching: boolean;
-    onDeleteLink: (linkIndex: number) => void;
 }
 
 export const LinkList: React.FC<LinkListProps> = ({ 
     links,
     isFetching,
-    onDeleteLink
 }) => {
+    const { deleteLink } = useDeleteLink();
+
     const handleDeleteLink = (index: number) => {
-        onDeleteLink(index);
+        deleteLink(index);
     }
 
     return (
@@ -31,7 +32,7 @@ export const LinkList: React.FC<LinkListProps> = ({
                 url={url}
                 imageSrc={imageSrc}
                 description={description}
-                onDelete={() => handleDeleteLink(index)}
+                onDelete={() => handleDeleteLink(id)}
                 />
             ))}
             {!isFetching && links?.length === 0 && (
