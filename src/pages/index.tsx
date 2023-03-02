@@ -88,7 +88,7 @@ function Home() {
                         </div>
                     </div>
                     <div className='w-full sm:max-w-[400px] sm:pl-2'>
-                        <AddLink onNewLink={addNewLink} />
+                        <AddLink />
                     </div>
                 </div>
             </div>

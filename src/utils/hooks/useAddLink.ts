@@ -1,9 +1,11 @@
+import { useLinkContext } from "@/contexts/LinkContext";
 import { LinkPayload } from "@/generated/openapi";
 import { useMutation } from "react-query";
 import { useCookie } from "./useCookie";
 
 export const useAddLink = () => {
     const { cookie } = useCookie("linktree");
+    const { refetchLinks } = useLinkContext();
 
     const headers = {
         "Content-Type": "application/json",
@@ -21,6 +23,10 @@ export const useAddLink = () => {
             };
             
             return fetch("http://localhost:8080/api/secure/links", requestOptions);
+        }, {
+            onSuccess: () => {
+                refetchLinks();
+            }
         }
     );
 
