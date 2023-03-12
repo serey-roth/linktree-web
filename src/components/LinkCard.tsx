@@ -32,7 +32,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             ) : (
                 <div className="bg-gray-400 w-[50px] h-[50px] rounded-lg" />
             )}
-            <div className="flex flex-col max-w-[400px] flex-1">
+            <div className="flex flex-col max-w-[400px] flex-1 gap-1">
                 <span className="font-semibold">
                     <EditableText text={title} textType='text'/>
                 </span>
