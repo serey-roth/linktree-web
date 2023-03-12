@@ -191,6 +191,32 @@ paths:
               schema:
                 type: boolean 
 
+  /secure/link/{id}:
+    put:
+      summary: Add a new link
+      tags:
+        - Links
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the link to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'payload.yaml#/components/schemas/LinkPayload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLinkResponse'
+
 security:
   - bearerAuth: []
 
@@ -206,7 +232,9 @@ components:
       type: object
       properties:
         data:
-          $ref: 'links.yaml#/components/schemas/PaginatedResponse'
+          oneOf:
+            - $ref: 'links.yaml#/components/schemas/PaginatedResponse'
+            - $ref: 'links.yaml#/components/schemas/Link'
         error:
           oneOf:
             - $ref: 'error.yaml#/components/schemas/Error'

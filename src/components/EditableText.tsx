@@ -5,10 +5,11 @@ import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 interface EditableTextProps {
   text: string;
   textType?: string;
+  onEdit: (value: string) => void;
 }
 
 export const EditableText: React.FC<EditableTextProps> = ({
-    text, textType='text'
+    text, textType='text', onEdit
 }) => {
     const [currentText, setCurrentText] = useState(text);
 
@@ -21,6 +22,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
     const onSubmit: SubmitHandler<{ text: string }> = (values) => {
         setCurrentText(values.text);
         setIsEditable(false);
+        onEdit(values.text);
     }
 
     return (
@@ -31,7 +33,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
             onSubmit={handleSubmit(onSubmit)}>
                 <input
                 autoFocus
-                className='py-1 px-2 ring-0 appearance-none
+                className='ring-0 appearance-none
                 outline-none border-0 focus:ring
                 focus:ring-slate-200 rounded-sm'
                 placeholder='Title'

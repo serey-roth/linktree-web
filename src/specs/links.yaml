@@ -11,10 +11,17 @@ components:
           type: string
         description:
           type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
       required:
         - id
         - title
         - url
+        - description
+        - createdAt
+        - updatedAt
     PaginatedResponse:
       type: object
       properties:
