@@ -1,7 +1,11 @@
+import { Link } from "@/generated/openapi";
 import { useDeleteLink } from "@/utils/hooks/useDeleteLink";
-import { Link } from "@/utils/types/Link";
 import React from "react";
 import { LinkCard } from "./LinkCard";
+
+type IndexedLink = Link & {
+    [key: string]: any;
+}
 
 interface LinkListProps {
     links?: Link[];
@@ -24,15 +28,11 @@ export const LinkList: React.FC<LinkListProps> = ({
             {isFetching && <p className='text-slate-300 text-center'>
                 Loading...
             </p>}
-            {links?.map(({ id, url, title, imageSrc, description }, index) => (
+            {links?.map((link) => (
                 <LinkCard 
-                key={id}
-                id={id}
-                title={title}
-                url={url}
-                imageSrc={imageSrc}
-                description={description}
-                onDelete={() => handleDeleteLink(id)}
+                key={link.id}
+                link={link as IndexedLink}
+                onDelete={() => handleDeleteLink(link.id)}
                 />
             ))}
             {!isFetching && links?.length === 0 && (
