@@ -190,8 +190,7 @@ paths:
             application/json:
               schema:
                 type: boolean 
-
-  /secure/link/{id}:
+                
     put:
       summary: Add a new link
       tags:
