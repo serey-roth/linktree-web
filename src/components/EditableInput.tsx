@@ -36,7 +36,7 @@ export const EditableInput: React.FC<EditableInputProps> = ({
                 className='ring-0 appearance-none
                 outline-none border-1 focus:ring px-1
                 focus:ring-slate-100 rounded-sm
-                bg-gray-200 w-full'
+                bg-teal-300 w-full'
                 required
                 {...register('value')} />
                 <button className='font-bold' type='submit'>
