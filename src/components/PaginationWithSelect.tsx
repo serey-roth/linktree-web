@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useState } from 'react'
 
-interface SimplePaginationProps {
+interface PaginationWithSelectProps {
     totalPages: number;
     updatePage: (page: number) => void;
     
 }
 
-export const SimplePagination: React.FC<SimplePaginationProps> = ({
+export const PaginationWithSelect: React.FC<PaginationWithSelectProps> = ({
     totalPages, updatePage,
 }) => {
     const [currentPage, setCurrentPage] = useState(0);
