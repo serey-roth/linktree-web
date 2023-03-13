@@ -1,7 +1,7 @@
 import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
-import { SimplePagination } from '@/components/SimplePagination'
+import { PaginationWithSelect } from '@/components/PaginationWithSelect'
 import { LinkContextProvider, useLinkContext } from '@/contexts/LinkContext'
 import { useCookie } from '@/utils/hooks/useCookie'
 import { useMe } from '@/utils/hooks/useMe'
@@ -46,7 +46,7 @@ function Home() {
                         <LinkList 
                             isFetching={isFetching}
                             links={linkData?.data || []}/>
-                        <SimplePagination
+                        <PaginationWithSelect
                             totalPages={linkData?.totalPages || 0}
                             updatePage={updatePageNumber} />
                     </div>
