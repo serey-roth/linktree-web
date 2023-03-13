@@ -29,24 +29,49 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     }
 
     return (
-        <div className="p-1 border shadow-md
-        rounded-lg flex items-center gap-2 flex-wrap"
-        >
-            <span className="font-semibold flex-1 px-1">
-                <EditableField 
-                field="title"
-                initialValue={link.title} 
-                type="text"
-                placeholder="Title"
-                onEdit={handleEdit}/>
-            </span>
-            <div className="flex flex-row items-center mr-2 gap-2">
-                <a href={link.url}>
-                    <HiExternalLink size={15} />
-                </a>
-                <button onClick={onDelete}>
-                    <AiFillDelete size={15} />
-                </button>
+        <div className="border shadow-md rounded-lg group 
+        relative h-auto drop-shadow-sm">
+            <div className="flex items-center gap-2 flex-wrap
+            py-1 bg-white"
+            >
+                <span className="font-semibold flex-1 px-1">
+                    <EditableField 
+                    field="title"
+                    initialValue={link.title} 
+                    type="text"
+                    placeholder="Title"
+                    onEdit={handleEdit}/>
+                </span>
+                <div className="flex flex-row items-center mr-2 gap-2">
+                    <a href={link.url}>
+                        <HiExternalLink size={15} />
+                    </a>
+                    <button onClick={onDelete}>
+                        <AiFillDelete size={15} />
+                    </button>
+                </div>
+            </div>
+            <div className="rounded-b-lg duration-500 inset-x-0
+            ease-in-out bg-teal-600 h-0 overflow-hidden
+            group-hover:h-[80px] opacity-0 group-hover:opacity-100
+            transition-[height] text-md">
+                <div className="flex flex-col gap-2 p-2 h-full">
+                    {link.description && <EditableField 
+                        field="description"
+                        initialValue={link.description} 
+                        type="text"
+                        placeholder="Description"
+                        onEdit={handleEdit}/>}
+                    <span className="flex items-center overflow-auto h-full">
+                        <p className='mr-2'>URL:</p>
+                        <EditableField 
+                            field="url"
+                            initialValue={link.url} 
+                            type="url"
+                            placeholder="URL"
+                            onEdit={handleEdit}/>
+                    </span>
+                </div>
             </div>
         </div>
     );
