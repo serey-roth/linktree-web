@@ -1,10 +1,10 @@
 import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
+import { SimplePagination } from '@/components/SimplePagination'
 import { LinkContextProvider, useLinkContext } from '@/contexts/LinkContext'
 import { useCookie } from '@/utils/hooks/useCookie'
 import { useMe } from '@/utils/hooks/useMe'
-import { Link } from '@/utils/types/Link'
 import { withContextProvider } from '@/utils/withContextProvider'
 import Image from 'next/image'
 import { useEffect } from 'react'
@@ -12,7 +12,6 @@ import { useEffect } from 'react'
 function Home() {
     const {
         data: linkData,
-        pageNumber,
         isFetching,
         updatePageNumber
     } = useLinkContext();
@@ -25,29 +24,6 @@ function Home() {
             refetchMe();
         }
     }, [cookie]);
-    
-    const addNewLink = (link: Link) => {
-        // setCurrentLinks(prevLinks => ([
-        //     ...prevLinks,
-        //     link
-        // ]))
-    }
-
-    const deleteNewLink = (index: number) => {
-        // setCurrentLinks(prevLinks => {
-        //     const copiedLinks = prevLinks.slice();
-        //     copiedLinks.splice(index, 1);
-        //     return copiedLinks;
-        // });
-    }
-
-    const nextPage = () => {
-        updatePageNumber(pageNumber + 1);
-    }
-
-    const prevPage = () => {
-        updatePageNumber(pageNumber < 1 ? pageNumber : pageNumber - 1)
-    }
 
     return (
         <Layout>
@@ -70,21 +46,9 @@ function Home() {
                         <LinkList 
                             isFetching={isFetching}
                             links={linkData?.data || []}/>
-                        <div className='grid items-center
-                        w-full grid-cols-2 gap-1'>
-                            <button
-                            onClick={prevPage}
-                            className='bg-teal-400
-                            p-2 rounded-lg drop-shadow-sm'>
-                                Prev page
-                            </button>
-                            <button
-                            onClick={nextPage}
-                            className='bg-teal-400
-                            p-2 rounded-lg drop-shadow-sm'>
-                                Next page
-                            </button>
-                        </div>
+                        <SimplePagination
+                            totalPages={linkData?.totalPages || 0}
+                            updatePage={updatePageNumber} />
                     </div>
                     <div className='w-full sm:max-w-[400px] sm:pl-2'>
                         <AddLink />
