@@ -1,45 +1,44 @@
-import React, { useState } from "react";
+import React, { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
-interface EditableTextProps {
-  text: string;
-  textType?: string;
+type EditableInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+  initialValue: string;
   onEdit: (value: string) => void;
 }
 
-export const EditableText: React.FC<EditableTextProps> = ({
-    text, textType='text', onEdit
+export const EditableInput: React.FC<EditableInputProps> = ({
+    initialValue, onEdit, ...rest
 }) => {
-    const [currentText, setCurrentText] = useState(text);
+    const [currentValue, setCurrentValue] = useState(initialValue);
 
     const { register, handleSubmit } = useForm<{ 
-        text: string 
-    }>({ values: { text: currentText } });
+        value: string 
+    }>({ values: { value: currentValue } });
 
     const [isEditable, setIsEditable] = useState(false);
 
-    const onSubmit: SubmitHandler<{ text: string }> = (values) => {
-        setCurrentText(values.text);
+    const onSubmit: SubmitHandler<{ value: string }> = ({ value }) => {
+        setCurrentValue(value);
         setIsEditable(false);
-        onEdit(values.text);
+        onEdit(value);
     }
 
     return (
         <>
         {isEditable ? (
             <form 
-            className='flex items-center gap-2'
+            className='flex items-center gap-2 w-full'
             onSubmit={handleSubmit(onSubmit)}>
                 <input
+                {...rest}   
                 autoFocus
                 className='ring-0 appearance-none
-                outline-none border-0 focus:ring
-                focus:ring-slate-200 rounded-sm'
-                placeholder='Title'
+                outline-none border-1 focus:ring px-1
+                focus:ring-slate-100 rounded-sm
+                bg-gray-200 w-full'
                 required
-                type={textType} 
-                {...register('text')} />
+                {...register('value')} />
                 <button className='font-bold' type='submit'>
                     <AiOutlineCheck size={15} />
                 </button>
@@ -50,7 +49,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         ):
         (<div className="flex items-center gap-2 group">
             <p className="text-center max-w-[130px] sm:max-w-full truncate">
-                {currentText}
+                {currentValue}
             </p>
             <button 
             className='opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out'

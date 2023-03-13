@@ -1,18 +1,17 @@
-import React from 'react'
-import { EditableText } from './EditableText';
+import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react'
+import { EditableInput } from './EditableInput';
 
-interface EditableFieldProps {
+type EditableFieldProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
     field: string;
     initialValue: string;
-    textType: string;
     onEdit: (field: string, value: string) => void;
 }
 
 export const EditableField: React.FC<EditableFieldProps> = ({
     field,
     initialValue,
-    textType,
-    onEdit
+    onEdit,
+    ...rest
 }) => {
 
     const handleEdit = (value: string) => {
@@ -20,9 +19,9 @@ export const EditableField: React.FC<EditableFieldProps> = ({
     }
 
     return (
-        <EditableText
-            text={initialValue}
-            textType={textType}
+        <EditableInput
+            {...rest}
+            initialValue={initialValue}
             onEdit={handleEdit}
         />
     )

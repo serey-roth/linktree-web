@@ -1,18 +1,25 @@
 import { LinkPayload, SecureLinkIdPutRequest } from "@/generated/openapi";
 import { useMutation, useQueryClient } from "react-query";
-import { linksApi } from "../openApi";
+import { generateRequestHeaders } from "../generateRequestHeaders";
+import { useCookie } from "./useCookie";
 
 type UpdatePayload = SecureLinkIdPutRequest;
 
 export const useUpdate = () => {
+    const { cookie } = useCookie("linktree");
+    
     const queryClient = useQueryClient();
 
     const { mutateAsync, ...rest } = useMutation(
-        ({ id, linkPayload: newLink }: UpdatePayload) => 
-            linksApi.withPreMiddleware().secureLinkIdPut({
-                id, 
-                linkPayload: newLink
-            }),
+        ({ id, linkPayload: newLink }: UpdatePayload) => {
+            const requestOptions = {
+                method: 'PUT',
+                headers: generateRequestHeaders(cookie),
+                body: JSON.stringify(newLink),
+            };
+            
+            return fetch(`http://localhost:8080/api/secure/link/${id}`, requestOptions);
+        },
         {
             onSuccess: (data, variables) => {
                 queryClient.setQueryData(
