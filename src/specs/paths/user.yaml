@@ -1,0 +1,132 @@
+paths:
+  /user/{username}:
+    get: 
+      summary: Get a user's info including their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+  
+  /user/{username}/paginated:
+    get: 
+      summary: Get a user's info including a pagination of their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+
+  /user/{username}/paginated-sorted:
+    get: 
+      summary: Get a user's info including a sorted paginated of their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+      
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          oneOf:
+            - $ref: '../models/error.yaml#/components/schemas/Error'
+            - $ref: '../models/error.yaml#/components/schemas/MultipleErrors'
+          nullable: true
+      required:
+        - error
+    UserWithLinks:
+      allOf: 
+        - $ref: '../models/user.yaml#/components/schemas/User'
+        - type: object
+          properties:
+            resources:
+              type: array
+              items: 
+                $ref: '../models/links.yaml#/components/schemas/Link'
+          required:
+            - resources
+
+    UserWithPaginatedLinks:
+      allOf: 
+        - $ref: '../models/user.yaml#/components/schemas/User'
+        - type: object
+          properties:
+            resources:
+              $ref: '../models/links.yaml#/components/schemas/PaginatedLinks'
+          required:
+            - resources
+    
+    UserWithLinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              oneOf:
+                - $ref: '#/components/schemas/UserWithLinks'
+                - $ref: '#/components/schemas/UserWithPaginatedLinks'
+              nullable: true
+          required:
+            - data

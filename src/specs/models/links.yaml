@@ -22,7 +22,7 @@ components:
         - description
         - createdAt
         - updatedAt
-    PaginatedResponse:
+    PaginatedLinks:
       type: object
       properties:
         totalPages:

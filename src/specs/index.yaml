@@ -1,0 +1,51 @@
+openapi: '3.0.0'
+info: 
+  title: Linktree Clone Api
+  version: '1.0.0'
+
+servers:
+  - url: http://localhost:8080/api
+
+paths: 
+  /auth/me: 
+    $ref: 'paths/auth.yaml#/paths/~1auth~1me'
+
+  /auth/register:
+    $ref: 'paths/auth.yaml#/paths/~1auth~1register'
+                
+  /auth/login: 
+    $ref: 'paths/auth.yaml#/paths/~1auth~1login'
+
+  /auth/logout:
+    $ref: 'paths/auth.yaml#/paths/~1auth~1logout'
+
+  /admin/links:
+    $ref: 'paths/admin.yaml#/paths/~1admin~1links'
+  
+  /admin/links/paginated:
+    $ref: 'paths/admin.yaml#/paths/~1admin~1links~1paginated'
+      
+  /admin/links/paginated-sorted:
+    $ref: 'paths/admin.yaml#/paths/~1admin~1links~1paginated-sorted'
+
+  /admin/link/{id}:
+    $ref: 'paths/admin.yaml#/paths/~1admin~1link~1{id}'
+
+  /user/{username}:
+    $ref: 'paths/user.yaml#/paths/~1user~1{username}'
+  
+  /user/{username}/paginated:
+    $ref: 'paths/user.yaml#/paths/~1user~1{username}~1paginated'
+
+  /user/{username}/paginated-sorted:
+    $ref: 'paths/user.yaml#/paths/~1user~1{username}~1paginated-sorted'
+      
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

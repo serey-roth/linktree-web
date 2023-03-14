@@ -1,0 +1,179 @@
+paths:
+  /admin/links:
+    get:
+      summary: Get all links for the current user
+      tags:
+        - Links
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '../models/links.yaml#/components/schemas/Link'
+    
+    post:
+      summary: Add a new link
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/payload.yaml#/components/schemas/LinkPayload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean 
+  
+  /admin/links/paginated:
+    get:
+      summary: Get a paginated list of links for the current user
+      tags:
+        - Links
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLinksResponse'
+      
+  /admin/links/paginated-sorted:
+    get:
+      summary: Get a sorted, paginated list of links for the current user
+      tags:
+        - Links
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLinksResponse'
+
+  /admin/link/{id}:
+    delete:
+      summary: Delete a link
+      tags:
+        - Links
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the link to be deleted
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean 
+                
+    put:
+      summary: Add a new link
+      tags:
+        - Links
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the link to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/payload.yaml#/components/schemas/LinkPayload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          oneOf:
+            - $ref: '../models/error.yaml#/components/schemas/Error'
+            - $ref: '../models/error.yaml#/components/schemas/MultipleErrors'
+          nullable: true
+      required:
+        - error
+    
+    LinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '../models/links.yaml#/components/schemas/Link'
+              nullable: true
+          required:
+            - data
+
+    LinkResponse:
+      allOf: 
+        - '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '../models/links.yaml#/components/schemas/Link'
+              nullable: true
+          required:
+            - data
+        
+    PaginatedLinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '../models/links.yaml#/components/schemas/PaginatedLinks'
+              nullable: true
+          required:
+            - data
