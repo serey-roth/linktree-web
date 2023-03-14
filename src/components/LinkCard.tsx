@@ -11,12 +11,14 @@ type IndexedLink = Link & {
 
 type LinkCardProps = {
     link: IndexedLink;
+    isEditable: boolean;
     onDelete: () => void;
     imageSrc?: string;
 }
 
 export const LinkCard: React.FC<LinkCardProps> = ({ 
     link,
+    isEditable,
     onDelete
 }) => {
     const { updateLink } = useUpdate();
@@ -35,12 +37,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             py-1 bg-white"
             >
                 <span className="font-semibold flex-1 px-1">
-                    <EditableField 
-                    field="title"
-                    initialValue={link.title} 
-                    type="text"
-                    placeholder="Title"
-                    onEdit={handleEdit}/>
+                    {isEditable ? (
+                        <EditableField 
+                            field="title"
+                            initialValue={link.title} 
+                            type="text"
+                            placeholder="Title"
+                            onEdit={handleEdit}/>
+                    ) : (
+                        <p>{link.title}</p>
+                    )}
                 </span>
                 <div className="flex flex-row items-center mr-2 gap-2">
                     <a href={link.url}>
@@ -56,20 +62,30 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             group-hover:h-[80px] opacity-0 group-hover:opacity-100
             transition-[height] text-md">
                 <div className="flex flex-col gap-2 p-2 h-full">
-                    {link.description && <EditableField 
-                        field="description"
-                        initialValue={link.description} 
-                        type="text"
-                        placeholder="Description"
-                        onEdit={handleEdit}/>}
+                    {link.description ? 
+                        isEditable ? (
+                            <EditableField 
+                                field="description"
+                                initialValue={link.description} 
+                                type="text"
+                                placeholder="Description"
+                                onEdit={handleEdit}/>
+                        ) : (
+                            <p>{link.description}</p>
+                        )
+                    : null}
                     <span className="flex items-center overflow-auto h-full">
                         <p className='mr-2'>URL:</p>
-                        <EditableField 
-                            field="url"
-                            initialValue={link.url} 
-                            type="url"
-                            placeholder="URL"
-                            onEdit={handleEdit}/>
+                        {isEditable ? (
+                            <EditableField 
+                                field="url"
+                                initialValue={link.url} 
+                                type="url"
+                                placeholder="URL"
+                                onEdit={handleEdit}/>
+                        ): (
+                            <p>{link.url}</p>
+                        )}
                     </span>
                 </div>
             </div>
