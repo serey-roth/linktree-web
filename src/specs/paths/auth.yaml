@@ -1,0 +1,95 @@
+paths:
+  /auth/me: 
+    get:
+      summary: Authenticate the current user
+      tags: 
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+
+  /auth/register:
+    post:
+      summary: Register a user
+      tags: 
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/payload.yaml#/components/schemas/UsernameEmailAndPassword'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+                
+  /auth/login: 
+    post:
+      summary: Login a potential user
+      tags: 
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/payload.yaml#/components/schemas/UsernameAndPassword'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+
+  /auth/logout:
+    post:
+      summary: Log out the current user
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthResponse'
+
+components:
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        data:
+          oneOf:
+            - $ref: '../models/user.yaml#/components/schemas/User'
+            - $ref: '../models/user.yaml#/components/schemas/JwtUser'
+            - $ref: '../models/error.yaml#/components/schemas/Message'
+          nullable: true
+        error:
+          oneOf:
+            - $ref: '../models/error.yaml#/components/schemas/Error'
+            - $ref: '../models/error.yaml#/components/schemas/MultipleErrors'
+          nullable: true
