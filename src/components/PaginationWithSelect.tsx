@@ -12,13 +12,19 @@ export const PaginationWithSelect: React.FC<PaginationWithSelectProps> = ({
     const [currentPage, setCurrentPage] = useState(0);
 
     const nextPage = () => {
-        const newPage = currentPage >= totalPages ? currentPage : currentPage + 1;
+        if (currentPage >= totalPages - 1) {
+            return;
+        }
+        const newPage = currentPage + 1;
         setCurrentPage(newPage);
         updatePage(newPage);
     }
 
     const previousPage = () => {
-        const newPage = currentPage < 1 ? currentPage: currentPage - 1;
+        if (currentPage <= 0) {
+            return;
+        }
+        const newPage = currentPage - 1;
         setCurrentPage(newPage);
         updatePage(newPage);
     }
