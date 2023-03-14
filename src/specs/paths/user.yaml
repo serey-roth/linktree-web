@@ -45,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithLinksResponse'
+                $ref: '#/components/schemas/UserWithPaginatedLinksResponse'
 
   /user/{username}/paginated-sorted:
     get: 
@@ -82,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithLinksResponse'
+                $ref: '#/components/schemas/UserWithPaginatedLinksResponse'
       
 components:
   schemas:
@@ -96,7 +96,8 @@ components:
           nullable: true
       required:
         - error
-    UserWithLinks:
+
+    UserWithLinksData:
       allOf: 
         - $ref: '../models/user.yaml#/components/schemas/User'
         - type: object
@@ -108,7 +109,18 @@ components:
           required:
             - resources
 
-    UserWithPaginatedLinks:
+    UserWithLinksResponse:
+      allOf: 
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/UserWithLinksData'
+              nullable: true
+          required: 
+            - data
+
+    UserWithPaginatedLinksData:
       allOf: 
         - $ref: '../models/user.yaml#/components/schemas/User'
         - type: object
@@ -117,16 +129,15 @@ components:
               $ref: '../models/links.yaml#/components/schemas/PaginatedLinks'
           required:
             - resources
-    
-    UserWithLinksResponse:
-      allOf:
+          
+    UserWithPaginatedLinksResponse:
+      allOf: 
         - $ref: '#/components/schemas/ErrorResponse'
         - type: object
           properties:
             data:
-              oneOf:
-                - $ref: '#/components/schemas/UserWithLinks'
-                - $ref: '#/components/schemas/UserWithPaginatedLinks'
+              $ref: '#/components/schemas/UserWithPaginatedLinksData'
               nullable: true
-          required:
+          required: 
             - data
+          nullable: true
