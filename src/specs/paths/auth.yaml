@@ -93,3 +93,6 @@ components:
             - $ref: '../models/error.yaml#/components/schemas/Error'
             - $ref: '../models/error.yaml#/components/schemas/MultipleErrors'
           nullable: true
+      required:
+        - data
+        - error

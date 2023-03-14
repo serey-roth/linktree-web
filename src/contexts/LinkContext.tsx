@@ -1,4 +1,5 @@
-import { ModelError, PaginatedResponse } from "@/generated/openapi";
+import { ModelError, PaginatedLinks } from "@/generated/openapi";
+import { usePaginatedParams } from "@/utils/hooks/usePaginatedParams";
 import { useSortedPaginatedLinks } from "@/utils/hooks/useSortedPaginatedLinks";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
@@ -7,7 +8,7 @@ type Order = "ASC" | "DESC";
 type Error = ModelError;
 
 type LinkContextValues = {
-    data: PaginatedResponse | undefined;
+    data: PaginatedLinks | undefined;
     error: Error | undefined;
     isFetching: boolean;
     pageNumber: number;
@@ -26,10 +27,16 @@ const LinkContext = createContext<LinkContextValues>({} as LinkContextValues);
 export const LinkContextProvider = ({
     children 
 }: { children : ReactNode }) => {
-    const [pageNumber, setPageNumber] = useState(0);
-    const [pageCount, setPageCount] = useState(5);
-    const [sortKey, setSortKey] = useState<string>("createdAt");
-    const [order, setOrder] = useState<Order>("DESC");
+    const {
+        pageCount,
+        pageNumber,
+        sortKey,
+        order,
+        updatePageCount,
+        updatePageNumber,
+        updateSortKey,
+        updateSortOrder
+    } = usePaginatedParams();
     
     const { data: linkData, isFetching, refetch} = useSortedPaginatedLinks({
         pageCount,
@@ -37,22 +44,6 @@ export const LinkContextProvider = ({
         sortKey,
         order
     });
-
-    const updatePageNumber = (pageNumber: number) => {
-        setPageNumber(pageNumber);
-    }
-
-    const updatePageCount = (pageCount: number) => {
-        setPageCount(pageCount);
-    }
-
-    const updateSortKey = (sortKey: string) => {
-        setSortKey(sortKey);
-    }
-
-    const updateSortOrder = (order: Order) => {
-        setOrder(order);
-    }
 
     const refetchLinks = () => {
         refetch();
@@ -65,7 +56,7 @@ export const LinkContextProvider = ({
     return (
         <LinkContext.Provider
         value={{
-            data: (linkData?.data as PaginatedResponse | undefined),
+            data: (linkData?.data as PaginatedLinks | undefined),
             error: (linkData?.error as Error | undefined),
             isFetching,
             pageCount,

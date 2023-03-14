@@ -1,26 +1,24 @@
-import { ApiAuthResponseData, User } from '@/generated/openapi';
-import { useCookie } from '@/utils/hooks/useCookie';
+import { AuthResponseData, User } from '@/generated/openapi';
 import { useLogout } from '@/utils/hooks/useLogout';
 import { useMe } from '@/utils/hooks/useMe';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 interface NavbarProps {
 
 }
 
-const isUser = (data: ApiAuthResponseData): data is User => {
+const isUser = (data: AuthResponseData): data is User => {
     return (data as User).username !== undefined;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
     const router = useRouter();
 
-    const { data: meData, refetch } = useMe();
+    const { data: meData } = useMe();
 
     const { logout } = useLogout();
-    const { cookie } = useCookie("linktree");
 
     const handleLogout = async () => {
         const result = await logout();
@@ -29,12 +27,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         }
     }
 
-    useEffect(() => {
-        if (cookie) {
-            refetch();
-        }
-    }, [cookie]);
-
     return (
         <div className='w-full flex items-center justify-between
         py-2'>
@@ -42,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 Linktree Clone
             </h1>
             <div className='flex items-center gap-2'>
-                {cookie && meData?.data ? (
+                {meData?.data ? (
                     <>  
                         <div className='rounded-full py-1 px-3
                         flex items-center justify-center 
