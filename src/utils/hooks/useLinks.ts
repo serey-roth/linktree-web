@@ -4,7 +4,7 @@ import { linksApi } from "../openApi"
 export const useLinks = () => {
     const query = useQuery(
         'links', 
-        () => linksApi.withPreMiddleware().secureLinksAllGet(),
+        () => linksApi.withPreMiddleware().adminLinksGet(),
         {
             keepPreviousData: true,
             enabled: false,

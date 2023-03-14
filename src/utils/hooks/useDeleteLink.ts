@@ -6,7 +6,7 @@ export const useDeleteLink = () => {
     const { refetchLinks } = useLinkContext();
 
     const { mutateAsync, ...rest } = useMutation(
-        (id: number) => linksApi.withPreMiddleware().secureLinkIdDelete({
+        (id: number) => linksApi.withPreMiddleware().adminLinkIdDelete({
             id
         }), {
             onSuccess: () => {
