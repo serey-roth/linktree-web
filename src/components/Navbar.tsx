@@ -17,10 +17,9 @@ const isUser = (data: ApiAuthResponseData): data is User => {
 export const Navbar: React.FC<NavbarProps> = ({}) => {
     const router = useRouter();
 
-    const { data: meData, refetch } = useMe();
+    const { data: meData } = useMe();
 
     const { logout } = useLogout();
-    const { cookie } = useCookie("linktree");
 
     const handleLogout = async () => {
         const result = await logout();
@@ -29,12 +28,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         }
     }
 
-    useEffect(() => {
-        if (cookie) {
-            refetch();
-        }
-    }, [cookie]);
-
     return (
         <div className='w-full flex items-center justify-between
         py-2'>
@@ -42,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 Linktree Clone
             </h1>
             <div className='flex items-center gap-2'>
-                {cookie && meData?.data ? (
+                {meData?.data ? (
                     <>  
                         <div className='rounded-full py-1 px-3
                         flex items-center justify-center 
