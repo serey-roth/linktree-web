@@ -1,16 +1,15 @@
-import { ApiAuthResponseData, User } from '@/generated/openapi';
-import { useCookie } from '@/utils/hooks/useCookie';
+import { AuthResponseData, User } from '@/generated/openapi';
 import { useLogout } from '@/utils/hooks/useLogout';
 import { useMe } from '@/utils/hooks/useMe';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 interface NavbarProps {
 
 }
 
-const isUser = (data: ApiAuthResponseData): data is User => {
+const isUser = (data: AuthResponseData): data is User => {
     return (data as User).username !== undefined;
 }
 
