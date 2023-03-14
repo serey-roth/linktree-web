@@ -20,7 +20,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
 
   /auth/register:
     post:
@@ -39,13 +39,13 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Bad request
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
                 
   /auth/login: 
     post:
@@ -64,13 +64,13 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Bad request
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
 
   /auth/logout:
     post:
@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiAuthResponse'
+                $ref: '#/components/schemas/AuthResponse'
 
   /admin/links:
     get:
@@ -96,7 +96,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiLinkResponse'
+                type: array
+                items: 
+                  $ref: 'links.yaml#/components/schemas/Link'
     
     post:
       summary: Add a new link
@@ -136,7 +138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiLinkResponse'
+                $ref: '#/components/schemas/PaginatedLinksResponse'
       
   /admin/links/paginated-sorted:
     get:
@@ -167,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiLinkResponse'
+                $ref: '#/components/schemas/PaginatedLinksResponse'
 
   /admin/link/{id}:
     delete:
@@ -212,8 +214,93 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiLinkResponse'
+                $ref: '#/components/schemas/LinkResponse'
 
+  /user/{username}:
+    get: 
+      summary: Get a user's info including their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+  
+  /user/{username}/paginated:
+    get: 
+      summary: Get a user's info including a pagination of their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+
+  /user/{username}/paginated-sorted:
+    get: 
+      summary: Get a user's info including a sorted paginated of their links
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The user's username
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLinksResponse'
+      
 security:
   - bearerAuth: []
 
@@ -225,20 +312,88 @@ components:
       bearerFormat: JWT
 
   schemas:
-    ApiLinkResponse:
+    ErrorResponse:
       type: object
       properties:
-        data:
-          oneOf:
-            - $ref: 'links.yaml#/components/schemas/PaginatedResponse'
-            - $ref: 'links.yaml#/components/schemas/Link'
         error:
           oneOf:
             - $ref: 'error.yaml#/components/schemas/Error'
             - $ref: 'error.yaml#/components/schemas/MultipleErrors'
           nullable: true
+      required:
+        - error
+    
+    LinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: 'links.yaml#/components/schemas/Link'
+              nullable: true
+          required:
+            - data
 
-    ApiAuthResponse:
+    LinkResponse:
+      allOf: 
+        - '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: 'links.yaml#/components/schemas/Link'
+              nullable: true
+          required:
+            - data
+        
+    PaginatedLinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: 'links.yaml#/components/schemas/PaginatedLinks'
+              nullable: true
+          required:
+            - data
+    
+    UserWithLinks:
+      allOf: 
+        - $ref: 'auth.yaml#/components/schemas/User'
+        - type: object
+          properties:
+            resources:
+              type: array
+              items: 
+                $ref: 'links.yaml#/components/schemas/Link'
+          required:
+            - resources
+
+    UserWithPaginatedLinks:
+      allOf: 
+        - $ref: 'auth.yaml#/components/schemas/User'
+        - type: object
+          properties:
+            resources:
+              $ref: 'links.yaml#/components/schemas/PaginatedLinks'
+          required:
+            - resources
+    
+    UserWithLinksResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              oneOf:
+                - $ref: '#/components/schemas/UserWithLinks'
+                - $ref: '#/components/schemas/UserWithPaginatedLinks'
+              nullable: true
+          required:
+            - data
+
+    AuthResponse:
       type: object
       properties:
         data:
