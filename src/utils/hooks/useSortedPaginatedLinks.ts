@@ -1,11 +1,11 @@
-import { SecureLinksPaginatedSortedGetRequest } from "@/generated/openapi";
+import { AdminLinksPaginatedSortedGetRequest } from "@/generated/openapi";
 import { useQuery } from "react-query";
 import { linksApi } from "../openApi";
 
-type SortedPaginatedPayload = SecureLinksPaginatedSortedGetRequest;
+type SortedPaginatedPayload = AdminLinksPaginatedSortedGetRequest;
 
 const getSortedPaginatedLinks = async (payload: SortedPaginatedPayload) => {
-    return linksApi.withPreMiddleware().secureLinksPaginatedSortedGet(payload);
+    return linksApi.withPreMiddleware().adminLinksPaginatedSortedGet(payload);
 }
 
 export const useSortedPaginatedLinks = (payload: SortedPaginatedPayload) => {

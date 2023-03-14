@@ -16,7 +16,7 @@ export const useAddLink = () => {
                 body: JSON.stringify(payload),
             };
             
-            return fetch("http://localhost:8080/api/secure/links", requestOptions);
+            return fetch("http://localhost:8080/api/admin/links", requestOptions);
         }, {
             onSuccess: () => {
                 refetchLinks();

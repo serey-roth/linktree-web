@@ -85,7 +85,7 @@ paths:
               schema: 
                 $ref: '#/components/schemas/ApiAuthResponse'
 
-  /secure/links/all:
+  /admin/links:
     get:
       summary: Get all links for the current user
       tags:
@@ -97,9 +97,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiLinkResponse'
-                  
+    
+    post:
+      summary: Add a new link
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'payload.yaml#/components/schemas/LinkPayload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean 
   
-  /secure/links/paginated:
+  /admin/links/paginated:
     get:
       summary: Get a paginated list of links for the current user
       tags:
@@ -121,7 +138,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiLinkResponse'
       
-  /secure/links/paginated_sorted:
+  /admin/links/paginated-sorted:
     get:
       summary: Get a sorted, paginated list of links for the current user
       tags:
@@ -152,26 +169,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiLinkResponse'
 
-  /secure/links:
-    post:
-      summary: Add a new link
-      tags:
-        - Links
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: 'payload.yaml#/components/schemas/LinkPayload'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
-
-  /secure/link/{id}:
+  /admin/link/{id}:
     delete:
       summary: Delete a link
       tags:

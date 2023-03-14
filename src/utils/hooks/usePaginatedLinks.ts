@@ -1,14 +1,11 @@
-import { SecureLinksPaginatedGetRequest } from "@/generated/openapi";
-import { QueryFunctionContext, QueryKey, useQuery } from "react-query";
+import { AdminLinksPaginatedGetRequest } from "@/generated/openapi";
+import { useQuery } from "react-query";
 import { linksApi } from "../openApi";
 
-const PAGE_COUNT = 5;
-const PAGE_NUMBER = 0;
-
-type PaginatedPayload = SecureLinksPaginatedGetRequest;
+type PaginatedPayload = AdminLinksPaginatedGetRequest;
 
 const getPaginatedLinks = async (payload: PaginatedPayload) => {
-    return linksApi.withPreMiddleware().secureLinksPaginatedGet(payload);
+    return linksApi.withPreMiddleware().adminLinksPaginatedGet(payload);
 }
 
 export const usePaginatedLinks = (payload: PaginatedPayload) => {

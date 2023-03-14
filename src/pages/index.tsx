@@ -3,11 +3,8 @@ import { Layout } from '@/components/Layout'
 import { LinkList } from '@/components/LinkList'
 import { PaginationWithSelect } from '@/components/PaginationWithSelect'
 import { LinkContextProvider, useLinkContext } from '@/contexts/LinkContext'
-import { useCookie } from '@/utils/hooks/useCookie'
-import { useMe } from '@/utils/hooks/useMe'
 import { withContextProvider } from '@/utils/withContextProvider'
 import Image from 'next/image'
-import { useEffect } from 'react'
 
 function Home() {
     const {
@@ -15,15 +12,6 @@ function Home() {
         isFetching,
         updatePageNumber
     } = useLinkContext();
-
-    const { refetch: refetchMe } = useMe();
-    const { cookie } = useCookie("linktree");
-
-    useEffect(() => {
-        if (cookie) {
-            refetchMe();
-        }
-    }, [cookie]);
 
     return (
         <Layout>

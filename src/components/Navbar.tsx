@@ -1,4 +1,4 @@
-import { ApiResponseData, User } from '@/generated/openapi';
+import { ApiAuthResponseData, User } from '@/generated/openapi';
 import { useCookie } from '@/utils/hooks/useCookie';
 import { useLogout } from '@/utils/hooks/useLogout';
 import { useMe } from '@/utils/hooks/useMe';
@@ -10,14 +10,14 @@ interface NavbarProps {
 
 }
 
-const isUser = (data: ApiResponseData): data is User => {
+const isUser = (data: ApiAuthResponseData): data is User => {
     return (data as User).username !== undefined;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
     const router = useRouter();
 
-    const { data: meData, refetch, isFetching } = useMe();
+    const { data: meData, refetch } = useMe();
 
     const { logout } = useLogout();
     const { cookie } = useCookie("linktree");
