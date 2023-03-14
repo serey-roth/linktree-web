@@ -1,9 +1,11 @@
 import { AddLink } from '@/components/AddLink'
 import { Layout } from '@/components/Layout'
+import { LinkCard } from '@/components/LinkCard'
 import { LinkList } from '@/components/LinkList'
 import { PaginationWithSelect } from '@/components/PaginationWithSelect'
 import { LinkContextProvider, useLinkContext } from '@/contexts/LinkContext'
 import { AuthResponseData, User } from '@/generated/openapi'
+import { useDeleteLink } from '@/utils/hooks/useDeleteLink'
 import { useMe } from '@/utils/hooks/useMe'
 import { withContextProvider } from '@/utils/withContextProvider'
 import Image from 'next/image'
@@ -24,6 +26,12 @@ function Home() {
     } = useLinkContext();
 
     const { data: meData } = useMe();
+
+    const { deleteLink } = useDeleteLink();
+
+    const handleDeleteLink = (index: number) => {
+        deleteLink(index);
+    }
     
     return (
         <Layout>
@@ -53,7 +61,15 @@ function Home() {
                         ) : null}
                         <LinkList 
                             isFetching={isFetching}
-                            links={linkData?.data || []}/>
+                            length={linkData?.data.length || 0}>
+                            {linkData?.data.map(link => (
+                                <LinkCard 
+                                key={link.id}
+                                link={link}
+                                isEditable={true}
+                                onDelete={() => handleDeleteLink(link.id)}/>
+                            ))}
+                        </LinkList>
                         <PaginationWithSelect
                             totalPages={linkData?.totalPages || 0}
                             updatePage={updatePageNumber} />

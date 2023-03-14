@@ -1,6 +1,8 @@
 import { Layout } from '@/components/Layout';
+import { LinkCard } from '@/components/LinkCard';
 import { LinkList } from '@/components/LinkList';
 import { PaginationWithSelect } from '@/components/PaginationWithSelect';
+import { useDeleteLink } from '@/utils/hooks/useDeleteLink';
 import { usePaginatedParams } from '@/utils/hooks/usePaginatedParams';
 import { useUserWithSortedPaginatedLinks } from '@/utils/hooks/useUserWithSortedPaginatedLinks';
 import Image from 'next/image';
@@ -31,6 +33,12 @@ const User: React.FC<UserProps> = ({}) => {
         order
     });
 
+    const { deleteLink } = useDeleteLink();
+
+    const handleDeleteLink = (index: number) => {
+        deleteLink(index);
+    }
+
     return (
         <Layout>
             <div className='flex items-center
@@ -49,7 +57,15 @@ const User: React.FC<UserProps> = ({}) => {
                     </h1>
                     <LinkList 
                         isFetching={isFetching}
-                        links={userData?.data.resources.data || []}/>
+                        length={userData?.data.resources.data.length || 0}>
+                        {userData?.data.resources.data.map(link => (
+                            <LinkCard 
+                                key={link.id}
+                                link={link}
+                                isEditable={false}
+                                onDelete={() => handleDeleteLink(link.id)}/>
+                            ))}
+                        </LinkList>
                     <PaginationWithSelect
                         totalPages={userData?.data.resources.totalPages || 0}
                         updatePage={updatePageNumber} />
