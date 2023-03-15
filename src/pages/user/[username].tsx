@@ -1,3 +1,4 @@
+import { Avatar } from '@/components/Avatar';
 import { Layout } from '@/components/Layout';
 import { LinkCard } from '@/components/LinkCard';
 import { LinkList } from '@/components/LinkList';
@@ -5,7 +6,6 @@ import { PaginationWithSelect } from '@/components/PaginationWithSelect';
 import { useDeleteLink } from '@/utils/hooks/useDeleteLink';
 import { usePaginatedParams } from '@/utils/hooks/usePaginatedParams';
 import { useUserWithSortedPaginatedLinks } from '@/utils/hooks/useUserWithSortedPaginatedLinks';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -45,10 +45,9 @@ const User: React.FC<UserProps> = ({}) => {
             justify-center px-2 mt-10'>
                 <div className='flex flex-col items-center w-screen sm:w-[580px]
                 gap-2'>
-                    <div className='w-[100px] flex items-center justify-center
-                    aspect-square rounded-full text-3xl font-bold bg-teal-400'>
-                        {userData?.data.username.charAt(0)}
-                    </div>
+                    <Avatar 
+                        variant='medium'
+                        name={userData?.data.username || ''} />
                     <h1 className='font-bold text-xl'>
                         {userData?.data.username}
                     </h1>
