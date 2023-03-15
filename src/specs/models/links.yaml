@@ -23,17 +23,13 @@ components:
         - createdAt
         - updatedAt
     PaginatedLinks:
-      type: object
-      properties:
-        totalPages:
-          type: integer
-        currentPage:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Link'
-      required:
-        - totalPages
-        - currentPage
-        - data
+      allOf:
+        - $ref: '../models/misc.yaml#/components/schemas/Paginated'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Link'
+          required:
+            - data
