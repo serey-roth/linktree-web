@@ -10,6 +10,8 @@ import { useDeleteLink } from '@/utils/hooks/useDeleteLink'
 import { useMe } from '@/utils/hooks/useMe'
 import { withContextProvider } from '@/utils/withContextProvider'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const isUser = (data: AuthResponseData): data is User => {
     const userData = data as User;
@@ -19,6 +21,8 @@ const isUser = (data: AuthResponseData): data is User => {
 } 
 
 function Home() {
+    const router = useRouter();
+
     const {
         data: linkData,
         isFetching,
@@ -32,6 +36,12 @@ function Home() {
     const handleDeleteLink = (index: number) => {
         deleteLink(index);
     }
+
+    useEffect(() => {
+        if (meData?.data === null || meData?.data === undefined) {
+            router.push('/discover');
+        }
+    }, [meData?.data])
     
     return (
         <Layout>
