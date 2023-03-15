@@ -1,0 +1,19 @@
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+      required: 
+        - message
+    Paginated:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+        currentPage:
+          type: integer
+      required:
+        - totalPages
+        - currentPage
