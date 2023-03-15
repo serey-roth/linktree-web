@@ -86,7 +86,7 @@ components:
           oneOf:
             - $ref: '../models/user.yaml#/components/schemas/User'
             - $ref: '../models/user.yaml#/components/schemas/JwtUser'
-            - $ref: '../models/error.yaml#/components/schemas/Message'
+            - $ref: '../models/misc.yaml#/components/schemas/Message'
           nullable: true
         error:
           oneOf:

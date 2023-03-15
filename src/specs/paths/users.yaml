@@ -1,0 +1,103 @@
+paths:
+  /users:
+    get: 
+      summary: Get all users
+      tags: 
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+  
+  /users/paginated:
+    get: 
+      summary: Get a pagination of users
+      tags: 
+        - Users
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsersResponse'
+
+  /users/paginated-sorted:
+    get: 
+      summary: Get a sorted pagination of users
+      tags: 
+        - Users
+      parameters:
+        - in: query
+          name: pageCount
+          schema:
+            type: integer
+        - in: query
+          name: pageNumber
+          schema: 
+            type: integer
+        - in: query
+          name: sortKey
+          schema:
+            type: string
+        - in: query
+          name: order
+          schema: 
+            type: string
+            enum: [ASC, DESC]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsersResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          oneOf:
+            - $ref: '../models/error.yaml#/components/schemas/Error'
+            - $ref: '../models/error.yaml#/components/schemas/MultipleErrors'
+          nullable: true
+      required:
+        - error
+    
+    UsersResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '../models/user.yaml#/components/schemas/User'
+              nullable: true
+          required:
+            - data
+        
+    PaginatedUsersResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '../models/user.yaml#/components/schemas/PaginatedUsers'
+              nullable: true
+          required:
+            - data

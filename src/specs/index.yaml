@@ -39,6 +39,15 @@ paths:
 
   /user/{username}/paginated-sorted:
     $ref: 'paths/user.yaml#/paths/~1user~1{username}~1paginated-sorted'
+
+  /users:
+    $ref: 'paths/users.yaml#/paths/~1users'
+  
+  /users/paginated:
+    $ref: 'paths/users.yaml#/paths/~1users~1paginated'
+
+  /users/paginated-sorted:
+    $ref: 'paths/users.yaml#/paths/~1users~1paginated-sorted'
       
 security:
   - bearerAuth: []

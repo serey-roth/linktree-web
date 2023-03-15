@@ -28,12 +28,26 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     }
 
     return (
-        <div className='w-full flex items-center justify-between
+        <div className='w-full flex items-center
         py-2'>
             <h1 className='text-lg font-bold'>
                 Linktree Clone
             </h1>
-            <div className='flex items-center gap-2'>
+            <Link 
+            className='hover:underline ml-2
+            transition duration:100 ease-in-out'
+            href='/discover'>
+                discover
+            </Link>
+            {meData?.data && (
+                <Link 
+                className='hover:underline ml-2
+                transition duration:100 ease-in-out'
+                href='/'>
+                    home
+                </Link>
+            )}
+            <div className='flex items-center gap-2 ml-auto'>
                 {meData?.data ? (
                     <>  
                         <div className='rounded-full py-1 px-3

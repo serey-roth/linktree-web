@@ -33,4 +33,16 @@ components:
           required:
             - accessToken
             - tokenType
+    PaginatedUsers:
+      allOf:
+        - $ref: '../models/misc.yaml#/components/schemas/Paginated'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+          required:
+            - data
+
     

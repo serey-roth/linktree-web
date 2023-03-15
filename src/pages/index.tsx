@@ -1,4 +1,5 @@
 import { AddLink } from '@/components/AddLink'
+import { Avatar } from '@/components/Avatar'
 import { Layout } from '@/components/Layout'
 import { LinkCard } from '@/components/LinkCard'
 import { LinkList } from '@/components/LinkList'
@@ -9,6 +10,8 @@ import { useDeleteLink } from '@/utils/hooks/useDeleteLink'
 import { useMe } from '@/utils/hooks/useMe'
 import { withContextProvider } from '@/utils/withContextProvider'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const isUser = (data: AuthResponseData): data is User => {
     const userData = data as User;
@@ -18,6 +21,8 @@ const isUser = (data: AuthResponseData): data is User => {
 } 
 
 function Home() {
+    const router = useRouter();
+
     const {
         data: linkData,
         isFetching,
@@ -31,6 +36,12 @@ function Home() {
     const handleDeleteLink = (index: number) => {
         deleteLink(index);
     }
+
+    useEffect(() => {
+        if (meData?.data === null || meData?.data === undefined) {
+            router.push('/discover');
+        }
+    }, [meData?.data])
     
     return (
         <Layout>
@@ -42,10 +53,10 @@ function Home() {
                     w-full max-w-[600px] gap-2 sm:border-r sm:pr-2'>
                         {meData?.data && isUser(meData.data)  ? (
                             <>
-                                <div className='w-[100px] flex items-center justify-center
-                                aspect-square rounded-full text-3xl font-bold bg-teal-400'>
-                                    {meData.data.username.charAt(0)}
-                                </div>
+                                <Avatar 
+                                    variant='medium'
+                                    // imageSrc='https://images.unsplash.com/photo-1624561172888-ac93c696e10c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80'
+                                    name={meData.data.username} />
                                 <Link href={`/user/${meData.data.username}`}>
                                     <h1 className='font-bold text-xl hover:underline
                                     hover:text-slate-400 transition duration-100
