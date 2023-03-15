@@ -40,10 +40,3 @@ components:
                 $ref: '#/components/schemas/FieldError'
           required:
             - errors
-    Message:
-      type: object
-      properties:
-        message:
-          type: string
-      required: 
-        - message
