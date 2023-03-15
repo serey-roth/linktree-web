@@ -52,9 +52,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                     <a href={link.url}>
                         <HiExternalLink size={15} />
                     </a>
-                    <button onClick={onDelete}>
+                    {isEditable && (<button onClick={onDelete}>
                         <AiFillDelete size={15} />
-                    </button>
+                    </button>)}
                 </div>
             </div>
             <div className="rounded-b-lg duration-500 inset-x-0
